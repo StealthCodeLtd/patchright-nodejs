@@ -1,6 +1,9 @@
 import fs from "node:fs/promises";
-import { Project, SyntaxKind, IndentationText } from "ts-morph";
+import path from 'path';
+import { Project, SyntaxKind, IndentationText, ObjectLiteralExpression } from "ts-morph";
 import YAML from "yaml";
+
+import * as patches from "./driver_patches/index.js";
 
 const project = new Project({
   manipulationSettings: {
