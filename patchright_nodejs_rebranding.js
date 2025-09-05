@@ -239,12 +239,6 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
           });
         });
 
-        // Some random path which is easier to just replace manually than with ts-morph/AST
-        fs.readFile("packages/patchright/lib/transform/esmUtils.js", "utf8", (err, data) => {
-            const updatedContent = data.replace(/playwright\/lib\/transform\/esmLoader/g, 'patchright/lib/transform/esmLoader');
-            fs.writeFile("packages/patchright/lib/transform/esmUtils.js", updatedContent, 'utf8', (err) => {});
-        });
-
         // Usage example: pass the directory path as an argument
         renameImportsAndExportsInDirectory("packages/patchright");
     })
