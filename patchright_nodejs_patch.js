@@ -51,19 +51,21 @@ clientBrowserContextClass.addMethod({
   isAsync: true,
 });
 const clientBrowserContextInstallInjectRouteMethod = clientBrowserContextClass.getMethod("installInjectRoute");
-clientBrowserContextInstallInjectRouteMethod.setBodyText(`if (this.routeInjecting) return;
-  await this.route('**/*', async route => {
+clientBrowserContextInstallInjectRouteMethod.setBodyText(`
+  if (this.routeInjecting) return;
+    await this.route('**/*', async route => {
     try {
-      if (route.request().resourceType() === 'document' && route.request().url().startsWith('http')) {
-          const protocol = route.request().url().split(':')[0];
-          await route.fallback({ url: protocol + '://patchright-init-script-inject.internal/' });
-      } else {
-          await route.fallback();
-      }
-  } catch (error) {
-      await route.fallback();
-  }
-});`);
+        if (route.request().resourceType() === 'document' && route.request().url().startsWith('http')) {
+            const protocol = route.request().url().split(':')[0];
+            await route.fallback({ url: protocol + '://patchright-init-script-inject.internal/' });
+        } else {
+            await route.fallback();
+        }
+    } catch (error) {
+        await route.fallback();
+    }
+  });
+`);
 
 // ----------------------------
 // client/page.ts
@@ -96,19 +98,21 @@ clientPageClass.addMethod({
   isAsync: true,
 });
 const clientPageInstallInjectRouteMethod = clientPageClass.getMethod("installInjectRoute");
-clientPageInstallInjectRouteMethod.setBodyText(`if (this.routeInjecting || this.context().routeInjecting) return;
-await this.route('**/*', async route => {
-  try {
-    if (route.request().resourceType() === 'document' && route.request().url().startsWith('http')) {
-        const protocol = route.request().url().split(':')[0];
-        await route.fallback({ url: protocol + '://patchright-init-script-inject.internal/' });
-    } else {
-        await route.fallback();
+clientPageInstallInjectRouteMethod.setBodyText(`
+  if (this.routeInjecting || this.context().routeInjecting) return;
+  await this.route('**/*', async route => {
+    try {
+      if (route.request().resourceType() === 'document' && route.request().url().startsWith('http')) {
+          const protocol = route.request().url().split(':')[0];
+          await route.fallback({ url: protocol + '://patchright-init-script-inject.internal/' });
+      } else {
+          await route.fallback();
+      }
+  } catch (error) {
+      await route.fallback();
     }
-} catch (error) {
-    await route.fallback();
-  }
-});`);
+  });
+`);
 
 // -- evaluate Method --
 const clientPageEvaluateMethod = clientPageClass.getMethod("evaluate");
@@ -158,9 +162,9 @@ const clientPageEvaluateHandleReturnStatement = clientPageEvaluateHandleMethod.g
 if (clientPageEvaluateHandleReturnStatement) {
   clientPageEvaluateHandleReturnStatement.replaceWithText(
     clientPageEvaluateHandleReturnStatement.getText().replace(
-          "this._mainFrame.evaluateHandle(pageFunction, arg)",
-          "this._mainFrame.evaluateHandle(pageFunction, arg, isolatedContext)"
-      )
+      "this._mainFrame.evaluateHandle(pageFunction, arg)",
+      "this._mainFrame.evaluateHandle(pageFunction, arg, isolatedContext)"
+    )
   );
 }
 
@@ -208,9 +212,9 @@ const workerEvaluateExpressionCall = workerEvaluateMethod.getFirstDescendant(nod
 if (workerEvaluateExpressionCall) {
   workerEvaluateExpressionCall.replaceWithText(
     workerEvaluateExpressionCall.getText().replace(
-          /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
-          "$1, isolatedContext: isolatedContext"
-      )
+      /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
+      "$1, isolatedContext: isolatedContext"
+    )
   );
 }
 
@@ -237,9 +241,9 @@ const workerEvaluateHandleExpressionCall = workerEvaluateHandleMethod.getFirstDe
 if (workerEvaluateHandleExpressionCall) {
   workerEvaluateHandleExpressionCall.replaceWithText(
     workerEvaluateHandleExpressionCall.getText().replace(
-          /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
-          "$1, isolatedContext: isolatedContext"
-      )
+      /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
+      "$1, isolatedContext: isolatedContext"
+    )
   );
 }
 
@@ -274,9 +278,9 @@ const clientFrameEvaluateExpressionCall = frameEvaluateMethod.getFirstDescendant
 if (clientFrameEvaluateExpressionCall) {
   clientFrameEvaluateExpressionCall.replaceWithText(
     clientFrameEvaluateExpressionCall.getText().replace(
-          /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
-          "$1, isolatedContext: isolatedContext"
-      )
+      /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
+      "$1, isolatedContext: isolatedContext"
+    )
   );
 }
 
@@ -303,9 +307,9 @@ const frameEvaluateHandleExpressionCall = frameEvaluateHandleMethod.getFirstDesc
 if (frameEvaluateHandleExpressionCall) {
   frameEvaluateHandleExpressionCall.replaceWithText(
     frameEvaluateHandleExpressionCall.getText().replace(
-          /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
-          "$1, isolatedContext: isolatedContext"
-      )
+      /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
+      "$1, isolatedContext: isolatedContext"
+    )
   );
 }
 
@@ -332,9 +336,9 @@ const frameEvalOnSelectorExpressionCall = frameEvalOnSelectorMethod.getFirstDesc
 if (frameEvalOnSelectorExpressionCall) {
   frameEvalOnSelectorExpressionCall.replaceWithText(
     frameEvalOnSelectorExpressionCall.getText().replace(
-          /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
-          "$1, isolatedContext: isolatedContext"
-      )
+      /(\{[\s\S]*?arg:\s*serializeArgument\(arg\))/,
+      "$1, isolatedContext: isolatedContext"
+    )
   );
 }
 
@@ -359,20 +363,22 @@ locatorEvaluateMethod.addParameter({
   type: "boolean",
   initializer: "true",
 });
-locatorEvaluateMethod.setBodyText(`return await this._withElement(
-      async (h) =>
-        parseResult(
-          (
-            await h._channel.evaluateExpression({
-              expression: String(pageFunction),
-              isFunction: typeof pageFunction === "function",
-              arg: serializeArgument(arg),
-              isolatedContext: isolatedContext,
-            })
-          ).value
-        ),
-      options?.timeout
-    );`)
+locatorEvaluateMethod.setBodyText(`
+  return await this._withElement(
+    async (h) =>
+      parseResult(
+        (
+          await h._channel.evaluateExpression({
+            expression: String(pageFunction),
+            isFunction: typeof pageFunction === "function",
+            arg: serializeArgument(arg),
+            isolatedContext: isolatedContext,
+          })
+        ).value
+      ),
+    options?.timeout
+  );
+`)
 
 // -- evaluateHandle Method --
 const locatorEvaluateHandleMethod = locatorClass.getMethod("evaluateHandle");
@@ -381,20 +387,22 @@ locatorEvaluateHandleMethod.addParameter({
   type: "boolean",
   initializer: "true",
 });
-locatorEvaluateHandleMethod.setBodyText(`return await this._withElement(
-  async (h) =>
-    JSHandle.from(
-      (
-        await h._channel.evaluateExpressionHandle({
-          expression: String(pageFunction),
-          isFunction: typeof pageFunction === "function",
-          arg: serializeArgument(arg),
-          isolatedContext: isolatedContext,
-        })
-      ).handle
-    ) as any as structs.SmartHandle<R>,
-  options?.timeout
-);`)
+locatorEvaluateHandleMethod.setBodyText(`
+  return await this._withElement(
+    async (h) =>
+      JSHandle.from(
+        (
+          await h._channel.evaluateExpressionHandle({
+            expression: String(pageFunction),
+            isFunction: typeof pageFunction === "function",
+            arg: serializeArgument(arg),
+            isolatedContext: isolatedContext,
+          })
+        ).handle
+      ) as any as structs.SmartHandle<R>,
+    options?.timeout
+  );
+`)
 
 // -- evaluateAll Method --
 const locatorEvaluateAllMethod = locatorClass.getMethod("evaluateAll");
@@ -420,8 +428,10 @@ jsHandleEvaluateMethod.addParameter({
   type: "boolean",
   initializer: "true",
 });
-jsHandleEvaluateMethod.setBodyText(`const result = await this._channel.evaluateExpression({ expression: String(pageFunction), isFunction: typeof pageFunction === 'function', arg: serializeArgument(arg), isolatedContext: isolatedContext });
-    return parseResult(result.value);`)
+jsHandleEvaluateMethod.setBodyText(`
+  const result = await this._channel.evaluateExpression({ expression: String(pageFunction), isFunction: typeof pageFunction === 'function', arg: serializeArgument(arg), isolatedContext: isolatedContext });
+  return parseResult(result.value);
+`)
 
 // -- evaluateHandle Method --
 const jsHandleEvaluateHandleMethod = clientJSHandleClass.getMethod("evaluateHandle");
@@ -430,9 +440,23 @@ jsHandleEvaluateHandleMethod.addParameter({
   type: "boolean",
   initializer: "true",
 });
-jsHandleEvaluateHandleMethod.setBodyText(`const result = await this._channel.evaluateExpressionHandle({ expression: String(pageFunction), isFunction: typeof pageFunction === 'function', arg: serializeArgument(arg), isolatedContext: isolatedContext });
-    return JSHandle.from(result.handle) as any as structs.SmartHandle<R>;`)
+jsHandleEvaluateHandleMethod.setBodyText(`
+  const result = await this._channel.evaluateExpressionHandle({ expression: String(pageFunction), isFunction: typeof pageFunction === 'function', arg: serializeArgument(arg), isolatedContext: isolatedContext });
+  return JSHandle.from(result.handle) as any as structs.SmartHandle<R>;
+`)
 
+
+// ----------------------------
+// client/tracing.ts
+// ----------------------------
+const tracingSourceFile = project.addSourceFileAtPath(
+  "packages/playwright-core/src/client/tracing.ts",
+);
+// ------- Tracing Class -------
+const clientTracingClass = tracingSourceFile.getClass("Tracing");
+// -- start Method --
+const tracingStartMethod = clientTracingClass.getMethod("start");
+tracingStartMethod.insertStatements(0, "await this._parent.installInjectRoute();");
 
 // Here the Driver Patch will be added by fetching the code from the main Driver Repository (in the workflow).
 // The URL from which the code is added is: https://raw.githubusercontent.com/Kaliiiiiiiiii-Vinyzu/patchright/refs/heads/main/patchright_driver_patch.js

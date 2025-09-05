@@ -45,7 +45,7 @@ workerEvaluateSignatures.forEach(method => {
 // ------- FrameType Interface -------
 const frameInterface = typesSourceFile.getInterface("Frame");
 const frameEvaluateSignatures = frameInterface.getMembers()
-  .filter(m => m.getKind() === SyntaxKind.MethodSignature && (m.getName() === "evaluate" || m.getName() === "evaluateHandle"));
+  .filter(m => m.getKind() === SyntaxKind.MethodSignature && (m.getName() === "evaluate" || m.getName() === "evaluateHandle" || m.getName() === "evaluateAll"));
 
 frameEvaluateSignatures.forEach(method => {
   const methodSig = method.asKindOrThrow(SyntaxKind.MethodSignature);
@@ -197,7 +197,7 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
         fs.readFile("packages/patchright-core/package.json", "utf8", (err, data) => {
           const packageJson = JSON.parse(data);
           packageJson.name = "patchright-core";
-          packageJson.version = "1.52.5"
+          // packageJson.version = "1.52.5"
           packageJson.author["name"] = "Microsoft Corportation, patched by github.com/Kaliiiiiiiiii-Vinyzu/";
           packageJson.homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
           packageJson.repository["url"] = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
@@ -218,7 +218,7 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
         fs.readFile("packages/patchright/package.json", "utf8", (err, data) => {
           const packageJson = JSON.parse(data);
           packageJson.name = "patchright";
-          packageJson.version = "1.52.5"
+          // packageJson.version = "1.52.5"
           packageJson.author["name"] = "Microsoft Corportation, patched by github.com/Kaliiiiiiiiii-Vinyzu/";
           packageJson.homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
           packageJson.repository["url"] = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
