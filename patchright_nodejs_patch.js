@@ -354,7 +354,7 @@ const locatorSourceFile = project.addSourceFileAtPath(
 // Add the custom import and comment at the start of the file
 locatorSourceFile.insertStatements(0, [
   "// undetected-undetected_playwright-patch - custom imports",
-  "import { JSHandle  } from './jsHandle';",
+  "import { JSHandle, parseResult, serializeArgument } from './jsHandle';",
   "",
 ]);
 // ------- Locator Class -------
@@ -379,7 +379,7 @@ locatorEvaluateMethod.setBodyText(`
           })
         ).value
       ),
-    options?.timeout
+    { title: "Evaluate", timeout: options?.timeout }
   );
 `)
 
@@ -403,7 +403,7 @@ locatorEvaluateHandleMethod.setBodyText(`
           })
         ).handle
       ) as any as structs.SmartHandle<R>,
-    options?.timeout
+    { title: "Evaluate", timeout: options?.timeout }
   );
 `)
 
