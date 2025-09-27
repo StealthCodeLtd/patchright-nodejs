@@ -197,7 +197,10 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
         fs.readFile("packages/patchright-core/package.json", "utf8", (err, data) => {
           const packageJson = JSON.parse(data);
           packageJson.name = "patchright-core";
-          // packageJson.version = "1.55.2"
+          if (process.env.patchright_release && process.env.patchright_release.trim() !== "") {
+            packageJson.version = process.env.patchright_release;
+          }
+
           packageJson.author["name"] = "Microsoft Corportation, patched by github.com/Kaliiiiiiiiii-Vinyzu/";
           packageJson.homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
           packageJson.repository["url"] = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
@@ -218,7 +221,9 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
         fs.readFile("packages/patchright/package.json", "utf8", (err, data) => {
           const packageJson = JSON.parse(data);
           packageJson.name = "patchright";
-          // packageJson.version = "1.55.2"
+          if (process.env.patchright_release && process.env.patchright_release.trim() !== "") {
+            packageJson.version = process.env.patchright_release;
+          }
           packageJson.author["name"] = "Microsoft Corportation, patched by github.com/Kaliiiiiiiiii-Vinyzu/";
           packageJson.homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
           packageJson.repository["url"] = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
