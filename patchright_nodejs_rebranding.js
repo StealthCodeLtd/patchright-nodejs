@@ -102,7 +102,7 @@ function getAllJsTsFiles(dir){
     return results;
 }
 
-// Main function to rename imports and exports from "playwright-core" to "patchright-core"
+// Main function to rename imports and exports from "playwright-core" to "@hakazibo/patchright-core"
 function renameImportsAndExportsInDirectory(directoryPath) {
     const project = new Project();
 
@@ -118,13 +118,13 @@ function renameImportsAndExportsInDirectory(directoryPath) {
         sourceFile.getImportDeclarations().forEach((importDecl) => {
             const moduleSpecifierValue = importDecl.getModuleSpecifierValue();
 
-            // If the import path starts with "playwright-core", replace it with "patchright-core"
+            // If the import path starts with "playwright-core", replace it with "@hakazibo/patchright-core"
             if (moduleSpecifierValue.startsWith("playwright-core")) {
-                const newModuleSpecifier = moduleSpecifierValue.replace("playwright-core", "patchright-core");
+                const newModuleSpecifier = moduleSpecifierValue.replace("playwright-core", "@hakazibo/patchright-core");
                 importDecl.setModuleSpecifier(newModuleSpecifier);
                 modified = true;
             } else if (moduleSpecifierValue.includes("playwright-core")) {
-                const newModuleSpecifier = moduleSpecifierValue.replace(/playwright-core/g, "patchright-core");
+                const newModuleSpecifier = moduleSpecifierValue.replace(/playwright-core/g, "@hakazibo/patchright-core");
                 importDecl.setModuleSpecifier(newModuleSpecifier);
                 modified = true;
             }
@@ -134,9 +134,9 @@ function renameImportsAndExportsInDirectory(directoryPath) {
         sourceFile.getExportDeclarations().forEach((exportDecl) => {
             const moduleSpecifierValue = exportDecl.getModuleSpecifierValue();
 
-            // If the export path starts with "playwright-core", replace it with "patchright-core"
+            // If the export path starts with "playwright-core", replace it with "@hakazibo/patchright-core"
             if (moduleSpecifierValue && moduleSpecifierValue.startsWith("playwright-core")) {
-                const newModuleSpecifier = moduleSpecifierValue.replace("playwright-core", "patchright-core");
+                const newModuleSpecifier = moduleSpecifierValue.replace("playwright-core", "@hakazibo/patchright-core");
                 exportDecl.setModuleSpecifier(newModuleSpecifier);
                 modified = true;
             }
@@ -148,7 +148,7 @@ function renameImportsAndExportsInDirectory(directoryPath) {
         });
 
         exportAllDeclarations.forEach(exportDecl => {
-            exportDecl.setModuleSpecifier('patchright-core');
+            exportDecl.setModuleSpecifier('@hakazibo/patchright-core');
             modified = true;
         });
 
@@ -165,11 +165,11 @@ function renameImportsAndExportsInDirectory(directoryPath) {
             const args = call.getArguments();
             if (args.length && (args[0].getText().includes("playwright-core"))) {
                 const arg = args[0];
-                arg.replaceWithText(arg.getText().replace(/playwright-core/g, "patchright-core"));
+                arg.replaceWithText(arg.getText().replace(/playwright-core/g, "@hakazibo/patchright-core"));
                 modified = true;
             } else if (args.length && (args[0].getText().includes("playwright"))) {
                 const arg = args[0];
-                arg.replaceWithText(arg.getText().replace(/playwright/g, "patchright"));
+                arg.replaceWithText(arg.getText().replace(/playwright/g, "@hakazibo/patchright"));
                 modified = true;
             }
         });
@@ -196,7 +196,7 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
         // playwright-core/package.json
         fs.readFile("packages/patchright-core/package.json", "utf8", (err, data) => {
           const packageJson = JSON.parse(data);
-          packageJson.name = "patchright-core";
+          packageJson.name = "@hakazibo/patchright-core";
           if (process.env.patchright_release && process.env.patchright_release.trim() !== "") {
             packageJson.version = process.env.patchright_release;
           }
@@ -205,7 +205,7 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
           packageJson.homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
           packageJson.repository["url"] = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
           packageJson.bin = {
-            "patchright-core": "cli.js"
+            "@hakazibo/patchright-core": "cli.js"
           }
 
           const updatedJsonData = JSON.stringify(packageJson, null, 4);
@@ -220,7 +220,7 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
         // playwright/package.json
         fs.readFile("packages/patchright/package.json", "utf8", (err, data) => {
           const packageJson = JSON.parse(data);
-          packageJson.name = "patchright";
+          packageJson.name = "@hakazibo/patchright";
           if (process.env.patchright_release && process.env.patchright_release.trim() !== "") {
             packageJson.version = process.env.patchright_release;
           }
@@ -231,7 +231,7 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
             "patchright": "cli.js"
           }
           packageJson.dependencies = {
-            "patchright-core": packageJson.version
+            "@hakazibo/patchright-core": packageJson.version
           }
 
           const updatedJsonData = JSON.stringify(packageJson, null, 4);

@@ -117,14 +117,14 @@ jobs:
         if: steps.version_check.outputs.proceed == 'true'
         run: |
           cd playwright/packages/patchright-core/
-          npm publish --access=public --provenance
+          npm publish --access=public --provenance --tag latest
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Patchright Package
         if: steps.version_check.outputs.proceed == 'true'
         run: |
           cd playwright/packages/patchright/
-          npm publish --access=public --provenance
+          npm publish --access=public --provenance --tag latest
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
