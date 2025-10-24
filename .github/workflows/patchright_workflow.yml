@@ -99,7 +99,22 @@ jobs:
         if: steps.version_check.outputs.proceed == 'true'
         run: |
           cd playwright
+          echo "Before rebranding:"
+          ls -la packages/
           node "../patchright_nodejs_rebranding.js"
+          echo "Waiting for rebranding to complete..."
+          sleep 5
+          echo "After rebranding:"
+          ls -la packages/
+          echo "Checking package names:"
+          if [ -f "packages/patchright-core/package.json" ]; then
+            echo "patchright-core package.json name:"
+            grep '"name"' packages/patchright-core/package.json
+          fi
+          if [ -f "packages/patchright/package.json" ]; then
+            echo "patchright package.json name:"
+            grep '"name"' packages/patchright/package.json
+          fi
 
       - name: Create Empty Versioning Release
         if: steps.version_check.outputs.proceed == 'true'
@@ -117,6 +132,16 @@ jobs:
         if: steps.version_check.outputs.proceed == 'true'
         run: |
           cd playwright/packages/patchright-core/
+          echo "Package name in package.json:"
+          grep '"name"' package.json
+          echo "Package version in package.json:"
+          grep '"version"' package.json
+          echo "Current directory:"
+          pwd
+          echo "Files in directory:"
+          ls -la
+          echo "Whoami check:"
+          npm whoami
           npm publish --access=public --provenance --tag latest
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
