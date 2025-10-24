@@ -116,6 +116,16 @@ jobs:
             grep '"name"' packages/patchright/package.json
           fi
 
+      - name: Setup NPM Authentication
+        if: steps.version_check.outputs.proceed == 'true'
+        run: |
+          cd playwright
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+          echo "Testing npm authentication..."
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Create Empty Versioning Release
         if: steps.version_check.outputs.proceed == 'true'
         uses: actions/create-release@v1
@@ -140,16 +150,10 @@ jobs:
           pwd
           echo "Files in directory:"
           ls -la
-          echo "Whoami check:"
-          npm whoami
           npm publish --access=public --provenance --tag latest
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Patchright Package
         if: steps.version_check.outputs.proceed == 'true'
         run: |
           cd playwright/packages/patchright/
           npm publish --access=public --provenance --tag latest
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
