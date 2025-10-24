@@ -190,7 +190,7 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
         fs.readFile("../README.md", "utf8", (err, data) => {
             fs.writeFileSync("packages/patchright/README.md", data, "utf8", (err) => {});
         });
-        fs.writeFileSync("packages/patchright-core/README.md", "# patchright-core\n\nThis package contains the no-browser flavor of [Patchright-NodeJS](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs).", "utf8", (err) => {});
+        fs.writeFileSync("packages/patchright-core/README.md", "# @hakazibo/patchright-core\n\nThis package contains the no-browser flavor of [Patchright-NodeJS](https://github.com/StealthCodeLtd/patchright-nodejs).", "utf8", (err) => {});
 
         // Package.Json Files
         // playwright-core/package.json
@@ -201,9 +201,9 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
             packageJson.version = process.env.patchright_release;
           }
 
-          packageJson.author["name"] = "Microsoft Corportation, patched by github.com/Kaliiiiiiiiii-Vinyzu/";
-          packageJson.homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
-          packageJson.repository["url"] = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
+          packageJson.author["name"] = "Microsoft Corporation, patched by github.com/StealthCodeLtd/";
+          packageJson.homepage = "https://github.com/StealthCodeLtd/patchright-nodejs"
+          packageJson.repository["url"] = "https://github.com/StealthCodeLtd/patchright-nodejs.git"
           packageJson.bin = {
             "@hakazibo/patchright-core": "cli.js"
           }
@@ -224,9 +224,9 @@ fs.rename("packages/playwright-core", "packages/patchright-core", (err) => {
           if (process.env.patchright_release && process.env.patchright_release.trim() !== "") {
             packageJson.version = process.env.patchright_release;
           }
-          packageJson.author["name"] = "Microsoft Corportation, patched by github.com/Kaliiiiiiiiii-Vinyzu/";
-          packageJson.homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
-          packageJson.repository["url"] = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-nodejs"
+          packageJson.author["name"] = "Microsoft Corporation, patched by github.com/StealthCodeLtd/";
+          packageJson.homepage = "https://github.com/StealthCodeLtd/patchright-nodejs"
+          packageJson.repository["url"] = "https://github.com/StealthCodeLtd/patchright-nodejs.git"
           packageJson.bin = {
             "patchright": "cli.js"
           }

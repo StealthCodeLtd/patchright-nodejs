@@ -146,6 +146,8 @@ jobs:
           grep '"name"' package.json
           echo "Package version in package.json:"
           grep '"version"' package.json
+          echo "Repository URL in package.json:"
+          grep '"url"' package.json
           echo "Current directory:"
           pwd
           echo "Files in directory:"
